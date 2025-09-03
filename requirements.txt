@@ -1,0 +1,22 @@
+# 秘塔AI搜索课件爬虫工具依赖包
+
+# 核心依赖
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# 数据处理
+urllib3>=2.0.0
+chardet>=5.0.0
+
+# 日志和配置
+coloredlogs>=15.0
+pyyaml>=6.0
+
+# 开发工具（可选）
+pytest>=7.0.0
+flake8>=6.0.0
+black>=23.0.0
+
+# 文档生成（可选）
+sphinx>=7.0.0
