@@ -366,6 +366,14 @@ class MetasoSpider:
             self.logger.error(f"爬取课件失败: {e}")
         
         return result
+    
+    def _is_valid_metaso_url(self, url: str) -> bool:
+        """验证是否为有效的秘塔AI搜索URL"""
+        try:
+            parsed = urlparse(url)
+            return parsed.netloc == 'metaso.cn' or parsed.netloc.endswith('.metaso.cn')
+        except Exception:
+            return False
 
 
 if __name__ == "__main__":
@@ -388,14 +396,6 @@ if __name__ == "__main__":
                 print(f"  - {file_info['type']}: {file_info['filename']}")
         else:
             print(f"\n❌ 爬取失败: {result.get('error', '未知错误')}")
-    
-    def _is_valid_metaso_url(self, url: str) -> bool:
-        """验证是否为有效的秘塔AI搜索URL"""
-        try:
-            parsed = urlparse(url)
-            return parsed.netloc == 'metaso.cn' or parsed.netloc.endswith('.metaso.cn')
-        except Exception:
-            return False
             
     except KeyboardInterrupt:
         print("\n用户中断爬取")

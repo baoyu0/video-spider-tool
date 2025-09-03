@@ -8,7 +8,7 @@
 import unittest
 import sys
 import os
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, Mock
 
 # 添加src目录到Python路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
@@ -40,26 +40,27 @@ class TestMetasoSpider(unittest.TestCase):
         invalid_url = "https://example.com/test"
         self.assertFalse(self.spider._is_valid_metaso_url(invalid_url))
     
-    @patch('requests.get')
-    def test_get_page_content(self, mock_get):
-        """测试页面内容获取"""
+    @patch('requests.Session.get')
+    def test_get_page_content_success(self, mock_get):
+        """测试页面内容获取成功"""
         # 模拟成功响应
-        mock_response = MagicMock()
+        mock_response = Mock()
         mock_response.status_code = 200
-        mock_response.text = "<html><body>Test Content</body></html>"
+        mock_response.text = "<html><body>Test content</body></html>"
+        mock_response.raise_for_status.return_value = None
+        mock_response.apparent_encoding = 'utf-8'
         mock_get.return_value = mock_response
         
         content = self.spider.get_page_content(self.test_url)
         self.assertIsNotNone(content)
-        self.assertIn("Test Content", content)
+        self.assertIn("Test content", str(content))
     
-    @patch('requests.get')
+    @patch('requests.Session.get')
     def test_get_page_content_error(self, mock_get):
         """测试页面获取错误处理"""
-        # 模拟404错误
-        mock_response = MagicMock()
-        mock_response.status_code = 404
-        mock_get.return_value = mock_response
+        # 模拟请求异常
+        import requests
+        mock_get.side_effect = requests.RequestException("Network error")
         
         content = self.spider.get_page_content(self.test_url)
         self.assertIsNone(content)
@@ -83,12 +84,12 @@ class TestMetasoSpider(unittest.TestCase):
         from bs4 import BeautifulSoup
         soup = BeautifulSoup(html_content, 'html.parser')
         
-        course_info = self.spider.extract_course_info(soup)
+        course_info = self.spider.extract_course_content(soup)
         
         self.assertIsInstance(course_info, dict)
         self.assertIn('title', course_info)
-        self.assertIn('images', course_info)
-        self.assertIn('downloads', course_info)
+        self.assertIn('preview_images', course_info)
+        self.assertIn('download_links', course_info)
 
 
 class TestConfiguration(unittest.TestCase):
@@ -97,18 +98,14 @@ class TestConfiguration(unittest.TestCase):
     def test_development_config(self):
         """测试开发环境配置"""
         config = DevelopmentConfig()
+        self.assertEqual(config.LOG_LEVEL, "DEBUG")
+        self.assertEqual(config.REQUEST_DELAY, 0.5)
         
-        self.assertTrue(config.DEBUG)
-        self.assertEqual(config.LOG_LEVEL, 'DEBUG')
-        self.assertIn('data', config.DOWNLOAD_DIR)
-    
-    def test_config_directories(self):
-        """测试配置目录"""
+    def test_directory_paths(self):
+        """测试目录路径配置"""
         config = DevelopmentConfig()
-        
-        # 检查目录路径是否正确
-        self.assertTrue(os.path.isabs(config.DOWNLOAD_DIR))
-        self.assertTrue(os.path.isabs(config.LOG_DIR))
+        self.assertTrue(os.path.isabs(config.DATA_DIR))
+        self.assertTrue(os.path.isabs(config.LOGS_DIR))
 
 
 def run_tests():
