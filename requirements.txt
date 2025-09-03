@@ -1,4 +1,4 @@
-# 秘塔AI搜索课件爬虫工具依赖包
+# Metaso视频下载工具依赖包
 
 # 核心依赖
 requests>=2.31.0
@@ -9,14 +9,14 @@ lxml>=4.9.0
 urllib3>=2.0.0
 chardet>=5.0.0
 
-# 日志和配置
-coloredlogs>=15.0
-pyyaml>=6.0
+# 浏览器自动化（用于selenium_video_downloader.py）
+selenium>=4.15.0
 
-# 开发工具（可选）
-pytest>=7.0.0
-flake8>=6.0.0
-black>=23.0.0
+# 进度条显示
+tqdm>=4.65.0
 
-# 文档生成（可选）
-sphinx>=7.0.0
+# JSON处理
+jsonpath-ng>=1.5.0
+
+# 正则表达式增强
+regex>=2023.0.0
