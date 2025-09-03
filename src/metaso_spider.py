@@ -47,6 +47,10 @@ class MetasoSpider:
         # 秘塔AI搜索的基础URL
         self.base_url = "https://metaso.cn"
         
+        # 导入配置
+        from config import DevelopmentConfig
+        self.config = DevelopmentConfig()
+        
     def _setup_logger(self, log_level: str) -> logging.Logger:
         """设置日志记录器"""
         logger = logging.getLogger('MetasoSpider')
@@ -384,6 +388,14 @@ if __name__ == "__main__":
                 print(f"  - {file_info['type']}: {file_info['filename']}")
         else:
             print(f"\n❌ 爬取失败: {result.get('error', '未知错误')}")
+    
+    def _is_valid_metaso_url(self, url: str) -> bool:
+        """验证是否为有效的秘塔AI搜索URL"""
+        try:
+            parsed = urlparse(url)
+            return parsed.netloc == 'metaso.cn' or parsed.netloc.endswith('.metaso.cn')
+        except Exception:
+            return False
             
     except KeyboardInterrupt:
         print("\n用户中断爬取")
