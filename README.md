@@ -1,6 +1,6 @@
-# Metaso视频下载工具
+# Metaso视频音频下载工具
 
-一个用于分析和下载Metaso平台视频的Python工具集。
+一个用于分析和下载Metaso平台视频和音频的Python工具集。
 
 ## 快速开始
 
@@ -17,8 +17,11 @@ video-spider-tool/
 ├── metaso_video_downloader.py      # 基础视频下载器
 ├── authenticated_video_downloader.py # 认证视频下载器（使用Cookie）
 ├── selenium_video_downloader.py     # Selenium自动化下载器
+├── complete_audio_downloader.py     # 完整音频下载器（自动认证）
+├── auto_metaso_auth.py             # 自动认证辅助工具
 ├── analyze_api_response.py          # API响应分析工具
-├── VIDEO_DOWNLOAD_GUIDE.md          # 详细使用指南
+├── VIDEO_DOWNLOAD_GUIDE.md          # 视频下载详细指南
+├── COMPLETE_AUDIO_GUIDE.md          # 音频下载详细指南
 ├── requirements.txt                 # Python依赖包
 ├── .gitignore                      # Git忽略文件
 └── README.md                       # 项目说明文档
@@ -48,19 +51,32 @@ pip install -r requirements.txt
 
 ### 2. 基本使用
 
-#### 方法一：基础下载器
+#### 视频下载
+
+**方法一：基础下载器**
 ```bash
 python metaso_video_downloader.py
 ```
 
-#### 方法二：认证下载器（推荐）
+**方法二：认证下载器（推荐）**
 ```bash
 python authenticated_video_downloader.py
 ```
 
-#### 方法三：Selenium自动化下载器
+**方法三：Selenium自动化下载器**
 ```bash
 python selenium_video_downloader.py
+```
+
+#### 音频下载
+
+**完整音频下载器（自动认证）**
+```bash
+# 使用默认URL
+python complete_audio_downloader.py
+
+# 指定目标URL
+python complete_audio_downloader.py https://metaso.cn/your-target-url
 ```
 
 ### 3. 配置说明
@@ -76,21 +92,34 @@ title = "your_video_title"      # 视频标题
 
 ## 工具说明
 
-### 1. metaso_video_downloader.py
+### 视频下载器
+
+#### 1. metaso_video_downloader.py
 基础视频下载器，通过分析网页内容和API响应来查找视频下载链接。
 
-### 2. authenticated_video_downloader.py
+#### 2. authenticated_video_downloader.py
 认证视频下载器，支持使用浏览器Cookie进行身份验证，提高下载成功率。
 
-### 3. selenium_video_downloader.py
+#### 3. selenium_video_downloader.py
 Selenium自动化下载器，可以模拟真实浏览器操作，自动处理登录和下载过程。
 
-### 4. analyze_api_response.py
-API响应分析工具，用于分析Metaso平台的API响应，查找潜在的视频下载链接。
+### 音频下载器
+
+#### 4. complete_audio_downloader.py
+完整音频下载器，支持自动认证和多种音频API端点扫描，专门用于下载完整的音频文件。
+
+#### 5. auto_metaso_auth.py
+自动认证辅助工具，通过浏览器自动化获取认证信息。
+
+### 分析工具
+
+#### 6. analyze_api_response.py
+API响应分析工具，用于分析Metaso平台的API响应，查找潜在的视频和音频下载链接。
 
 ## 使用指南
 
-详细的使用方法和故障排除请参考：[VIDEO_DOWNLOAD_GUIDE.md](VIDEO_DOWNLOAD_GUIDE.md)
+- **视频下载**：详细的使用方法和故障排除请参考 [VIDEO_DOWNLOAD_GUIDE.md](VIDEO_DOWNLOAD_GUIDE.md)
+- **音频下载**：完整音频下载指南请参考 [COMPLETE_AUDIO_GUIDE.md](COMPLETE_AUDIO_GUIDE.md)
 
 ## 注意事项
 

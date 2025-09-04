@@ -1,27 +1,43 @@
-# Metaso视频下载指南
+# Metaso视频/音频下载指南
 
-本项目提供了多种方法来下载Metaso平台上生成的视频，以绕过会员积分限制。
+本项目提供了多种方法来下载Metaso平台上生成的视频和音频文件，以绕过会员积分限制。
 
 ## 🎯 项目目标
 
-从Metaso平台下载由PPT转换生成的视频，避免消耗会员积分。
+从Metaso平台下载由PPT转换生成的视频和音频文件，避免消耗会员积分。支持：
+- 完整视频文件下载
+- **完整音频文件下载（推荐用于音频需求）**
+- Blob URL音频片段下载
+- MP3等音频格式提取
 
 ## 📁 文件说明
 
 ### 核心下载工具
 
-1. **`metaso_video_downloader.py`** - 基础视频下载器
+1. **`complete_audio_downloader.py`** - 完整音频下载器 ⭐ **推荐用于音频下载**
+   - 专门用于下载完整音频文件（MP3、WAV等），而非音频片段
+   - 支持多种音频API端点扫描
+   - 自动识别音频文件类型
+   - 智能文件命名
+
+2. **`metaso_video_downloader.py`** - 基础视频下载器
    - 分析页面结构，查找视频API端点
    - 无需认证，但可能受权限限制
 
-2. **`authenticated_video_downloader.py`** - 认证视频下载器
+3. **`authenticated_video_downloader.py`** - 认证视频下载器
    - 需要手动输入浏览器cookies
    - 适合有登录权限的用户
 
-3. **`selenium_video_downloader.py`** - 自动化浏览器下载器
+4. **`selenium_video_downloader.py`** - 自动化浏览器下载器
    - 使用Selenium自动化浏览器操作
    - 可以模拟真实用户行为
    - 需要安装Chrome浏览器和ChromeDriver
+
+5. **`blob_audio_downloader.py`** - Blob音频下载器 🆕
+   - 专门处理blob URL音频文件
+   - 捕获播放过程中的音频片段
+   - 支持MP3、WAV、OGG等格式
+   - 适合下载音频解说或背景音乐
 
 ### 分析工具
 
@@ -34,7 +50,33 @@
 
 ## 🚀 使用方法
 
-### 方法一：基础下载（推荐先尝试）
+### 方法一：完整音频下载 ⭐ **推荐**
+
+**适用场景：** 需要下载完整的音频文件（如MP3），而非音频片段
+
+**使用步骤：**
+
+1. 基础使用（无认证）：
+```bash
+cd video-spider-tool
+python complete_audio_downloader.py
+```
+
+2. 使用认证信息（推荐）：
+```bash
+python complete_audio_downloader.py --uid=你的UID --sid=你的SID
+```
+
+**特点：**
+- 专门针对完整音频文件
+- 支持多种音频格式（MP3、WAV、OGG、M4A）
+- 全面的音频API端点扫描
+- 自动识别音频文件类型
+- 智能文件命名
+
+**预期结果：** 获得单个完整的音频文件
+
+### 方法二：基础视频下载（推荐先尝试）
 
 ```bash
 python metaso_video_downloader.py
@@ -78,6 +120,32 @@ python selenium_video_downloader.py
 4. 登录完成后在终端按回车继续
 5. 脚本会自动查找视频元素和API
 6. 使用浏览器的认证状态下载视频
+
+### 方法五：Blob音频片段下载（专门处理音频片段）🆕
+
+```bash
+python blob_audio_downloader.py
+```
+
+**适用场景**：
+- 当你在DevTools的Network->Media中看到blob URL
+- 音频文件以片段形式加载
+- 需要提取MP3等音频格式
+
+**使用步骤**：
+1. 运行脚本，输入目标页面URL
+2. 脚本打开浏览器并导航到页面
+3. 手动登录账户
+4. 脚本启用网络监控和blob URL捕获
+5. **在浏览器中开始播放视频/音频**
+6. 脚本自动捕获播放过程中的音频片段
+7. 下载所有捕获的音频文件到downloads目录
+
+**特点**：
+- 自动监控blob URL创建
+- 捕获音频数据并转换为文件
+- 支持多种音频格式
+- 可以下载完整音频或片段集合
 
 ## 🔧 环境准备
 
